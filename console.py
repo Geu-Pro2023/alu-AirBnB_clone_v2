@@ -4,10 +4,6 @@ import cmd
 import sys
 import models
 from models.base_model import BaseModel
-<<<<<<< HEAD
-from models import storage
-=======
->>>>>>> cdb985bf1439ce5eb65b582b4c93fc576612c422
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -120,13 +116,8 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-<<<<<<< HEAD
-                    if pline[0] == '{' and pline[-1] == '}'\
-                            and type(eval(pline)) == dict:
-=======
                     if pline[0] == '{' and pline[-1] == '}' \
                             and type(eval(pline)) is dict:
->>>>>>> cdb985bf1439ce5eb65b582b4c93fc576612c422
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
@@ -166,36 +157,6 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-<<<<<<< HEAD
-        """
-        use to create new objects with additional attributes
-        """
-        args = args.split()
-        if len(args) == 0:
-            print("** class name missing **")
-            return
-        if args[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        attr_and_values = {}
-        for ele in args[1:]:
-            key = ele.split("=")[0]
-            value = ele.split("=")[1]
-            if '"' not in value:
-                if "." not in value:
-                    value = int(value)
-                else:
-                    value = float(value)
-            else:
-                value = value.strip('"').replace("_", " ")
-            attr_and_values[key] = value
-        new_instance = HBNBCommand.classes[args[0]]()
-        for k, v in attr_and_values.items():
-            setattr(new_instance, k, v)
-        storage.new(new_instance)
-        storage.save()
-        print(new_instance.id)
-=======
         """ Create an object of any class"""
         if len(args) < 1:
             print("** class name missing **")
@@ -234,7 +195,6 @@ class HBNBCommand(cmd.Cmd):
 
         print(new_instance.id)
         new_instance.save()
->>>>>>> cdb985bf1439ce5eb65b582b4c93fc576612c422
 
     def help_create(self):
         """ Help information for the create method """
@@ -265,11 +225,7 @@ class HBNBCommand(cmd.Cmd):
 
         key = c_name + "." + c_id
         try:
-<<<<<<< HEAD
-            print(storage.all()[key])
-=======
             print(models.storage.all()[key])
->>>>>>> cdb985bf1439ce5eb65b582b4c93fc576612c422
         except KeyError:
             print("** no instance found **")
 
@@ -301,13 +257,8 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-<<<<<<< HEAD
-            del (storage.all()[key])
-            storage.save()
-=======
             del (models.storage.all()[key])
             models.storage.save()
->>>>>>> cdb985bf1439ce5eb65b582b4c93fc576612c422
         except KeyError:
             print("** no instance found **")
 
@@ -325,19 +276,11 @@ class HBNBCommand(cmd.Cmd):
             if class_name not in self.classes:
                 print("** class doesn't exist **")
                 return
-<<<<<<< HEAD
-            for k, v in storage.all().items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
-        else:
-            for k, v in storage.all().items():
-=======
             for k, v in models.storage.all().items():
                 if k.split('.')[0] == class_name:
                     print_list.append(str(v))
         else:
             for k, v in models.storage.all().items():
->>>>>>> cdb985bf1439ce5eb65b582b4c93fc576612c422
                 print_list.append(str(v))
 
         print(print_list)
@@ -350,20 +293,10 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, args):
         """Count current number of class instances"""
         count = 0
-<<<<<<< HEAD
-        if args == "":
-            for ele in storage.all():
-=======
         for k, v in models.storage._FileStorage__objects.items():
             if args == k.split('.')[0]:
->>>>>>> cdb985bf1439ce5eb65b582b4c93fc576612c422
                 count += 1
-            print(count)
-        else:
-            for k, v in storage.all().items():
-                if args == k.split('.')[0]:
-                    count += 1
-            print(count)
+        print(count)
 
     def help_count(self):
         """ """
@@ -401,7 +334,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # first determine if kwargs or args
-        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) == dict:
+        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
             kwargs = eval(args[2])
             args = []  # reformat kwargs into list, ex: [<name>, <value>, ...]
             for k, v in kwargs.items():

@@ -1,47 +1,38 @@
-#!/usr/bin/python3
-<<<<<<< HEAD
-'''Fabric script to generate .tgz archive'''
+import unittest
+import MySQLdb
 
-from fabric.api import local
-from datetime import datetime
+class TestDatabaseFunctionality(unittest.TestCase):
+    def setUp(self):
+        # Connect to the test database
+        self.conn = MySQLdb.connect(
+            user='hbnb_test',
+            password='hbnb_test_pwd',
+            host='localhost',
+            database='hbnb_test_db'
+        )
+        self.cursor = self.conn.cursor()
 
-from fabric.decorators import runs_once
+    def tearDown(self):
+        # Close the database connection
+        self.cursor.close()
+        self.conn.close()
 
+    def test_create_state(self):
+        # Get the initial number of records in the states table
+        self.cursor.execute("SELECT COUNT(*) FROM states")
+        initial_count = self.cursor.fetchone()[0]
 
-@runs_once
-def do_pack():
-    '''generates .tgz archive from the contents of the web_static folder'''
-    local("mkdir -p versions")
-    path = ("versions/web_static_{}.tgz"
-            .format(datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")))
-    result = local("tar -cvzf {} web_static"
-                   .format(path))
+        # Execute the action (e.g., create a new state)
+        # Assume that you have a function to create a state in your application
+        create_state_function()  # Replace with the actual function call
 
-    if result.failed:
-        return None
-    return path
-=======
-"""
-    script that generates '.tgz' archive from the contents of the 'web_static'
-"""
-from fabric.api import local
-from datetime import datetime
+        # Get the number of records in the states table again
+        self.cursor.execute("SELECT COUNT(*) FROM states")
+        final_count = self.cursor.fetchone()[0]
 
+        # Validate the action
+        self.assertEqual(final_count, initial_count + 1, "New state was not created")
 
-def do_pack():
-    """
-        function to compress directory into .tgz archive
-        Return: Success - '.tgz' archive path
-                Failure - None
-    """
-    now = datetime.now()
-    now = now.strftime('%Y%m%d%H%M%S')
-    archive_path = 'versions/web_static_' + now + '.tgz'
+if __name__ == '__main__':
+    unittest.main()
 
-    local('mkdir -p versions/')
-    result = local('tar -cvzf {} web_static/'.format(archive_path))
-
-    if result.succeeded:
-        return archive_path
-    return None
->>>>>>> cdb985bf1439ce5eb65b582b4c93fc576612c422
